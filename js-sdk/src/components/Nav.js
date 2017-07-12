@@ -11,18 +11,11 @@ export default class Nav extends Component {
 		this.store = this.props.store.appState;
 	}
 
-	authenticate(e) {
-		if (e) e.preventDefault();
-		this.props.store.authenticate();
-	}
-
 	render() {
-		const { authenticated, authenticating } = this.store;
+//		const { authenticated, authenticating } = this.store;
 		return (
 			<nav>
 				<ActiveLink activeOnlyWhenExact={true} to='/'>Home</ActiveLink>
-
-				{authenticated && <ActiveLink to='/member'>Member</ActiveLink>}
 			</nav>
 		);
 	}

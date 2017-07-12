@@ -7,6 +7,7 @@ import DevTools from 'mobx-react-devtools';
 import Footer from './Footer';
 import Header from './Header';
 
+
 @inject('store', 'routing')
 @observer
 export default class App extends Component {
@@ -16,16 +17,8 @@ export default class App extends Component {
 		this.store = this.props.store;
 	}
 
-	authenticate(e) {
-		if (e) e.preventDefault();
-
-		this.store.appState.authenticate();
-	}
-
 	render() {
 		const {
-			authenticated,
-			authenticating,
 			timeToRefresh,
 			refreshToken
 		} = this.store.appState;
@@ -41,23 +34,6 @@ export default class App extends Component {
 						<LazyRoute {...props} component={import('./Home')} />
 					)}
 				/>
-
-				<Route
-					exact
-					path='/member'
-					render={props => (
-						<LazyRoute {...props} component={import('./Member')} />
-					)}
-				/>
-
-				<Route
-					exact
-					path='/login'
-					render={props => (
-						<LazyRoute {...props} component={import('./Login')} />
-					)}
-				/>
-
 				<Footer />
 			</div>
 		);

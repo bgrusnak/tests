@@ -13,25 +13,12 @@ export default class Header extends Component {
 		this.store = this.props.store.appState;
 	}
 
-	authenticate(e) {
-		if (e) e.preventDefault();
-
-		console.log('CLICKED BUTTON');
-
-		this.store.authenticate();
-	}
 
 	render() {
-		const { authenticated } = this.store;
-
+	
 		return (
 			<header className='header'>
 				<Nav location={this.props.location} />
-
-				<Button
-					onClick={this.authenticate.bind(this)}
-					title={authenticated ? 'Log out' : 'Sign in'}
-				/>
 			</header>
 		);
 	}

@@ -13,6 +13,8 @@ import stores from './stores/stores';
 import { RouterStore, syncHistoryWithStore } from 'mobx-react-router';
 import createBrowserHistory from 'history/createBrowserHistory';
 
+
+
 const store = rehydrate();
 
 const renderApp = Component => {
