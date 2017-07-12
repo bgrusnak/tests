@@ -4,6 +4,7 @@ import { toJS, observable, action, computed } from 'mobx';
 
 export default class AppState {
   @observable items = []
+  @observable grouped = []
   @computed get isRunning() {
     return this._isRunning
   }
@@ -37,9 +38,35 @@ export default class AppState {
 
   onSourceMessage = function (e) {
     let data = JSON.parse(e.data)
-    data = data.concat(toJS(this.items)).slice(0, 100)
-    this.items.replace(data)
-    console.log(this.items.length)
+    this.items.replace(data.concat(toJS(this.items)).slice(0, 100))
+    let currentGrouped = []
+    data.map(row => {
+      let fnd = currentGrouped.find(group => group.name == row.name)
+      if (fnd) {
+        fnd.measurements = fnd.measurements.concat(row.measurements)
+        currentGrouped = currentGrouped.map(item => {
+          return item.name == row.name ? fnd : item
+        })
+      } else {
+        currentGrouped.push({ name: row.name, unit: row.unit, measurements:row.measurements })
+      }
+    })
+    let grp = toJS(this.grouped)
+    currentGrouped.map(row => {
+      let fnd = grp.find(group => group.name == row.name)
+      if (fnd) {
+        fnd.measurements = fnd.measurements.concat(row.measurements)
+        currentGrouped = currentGrouped.map(item => {
+          return item.name == row.name ? fnd : item
+        })
+      } else {
+        row.measurements = row.measurements.sort((a,b)=>{
+          return b[0]-a[0]
+        }).slice(0,100)
+        grp.push({ name: row.name, unit: row.unit, measurements:row.measurements })
+      }
+    })
+    this.grouped.replace(grp)
   }
   onSourceOpen = function (e) {
     console.log("Connection was opened")

@@ -26,7 +26,6 @@ export default class App extends Component {
 		return (
 			<div className='wrapper'>
 				<Header location={this.props.routing.location} />
-
 				<Route
 					exact
 					path='/'
