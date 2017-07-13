@@ -10,7 +10,7 @@ export default class Grouped extends Component {
 	constructor(props) {
 		super(props);
 		this.store = props.store.appState;
-		this.items = props.store.appState.items
+		this.items = props.store.appState.grouped
 	}
 
 	render() {
@@ -27,10 +27,10 @@ export default class Grouped extends Component {
 								</tr>
 							</thead>
 							<tbody>
-								{this.items.map((item) => {
+								{this.items.map((item,itemindex) => {
 									let data = JSON.stringify(item.measurements)
 									return (
-										<tr>
+										<tr key={itemindex}>
 											<td>{item.name}</td>
 											<td>{item.unit}</td>
 											<td>
@@ -42,15 +42,17 @@ export default class Grouped extends Component {
 														</tr>
 													</thead>
 													<tbody>
-														{item.measurements.map(measure => {
-															return (<tr>
-																<td>{measure[0]}</td>
-																<td>{JSON.stringify(measure[1])}</td>
-															</tr>)
+														{item.measurements.map((measure, index) => {
+															return (
+																<tr key={index}>
+																	<td>{measure[0]}</td>
+																	<td>{JSON.stringify(measure[1])}</td>
+																</tr>
+															)
 														})}
 													</tbody>
 												</Table>
-												</td>
+											</td>
 										</tr>
 									)
 								})}

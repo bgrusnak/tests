@@ -15,10 +15,10 @@ export default class Home extends Component {
 
 	render() {
 		return (
-		<Tabs id="t">
-      <Tab eventKey={1}   title="Regular"><Regular  /></Tab>
-      <Tab eventKey={2}   title="Grouped"><Grouped  /></Tab>
-    </Tabs>
+			<Tabs id="t">
+				<Tab eventKey={1} title="Regular"><Regular /></Tab>
+				<Tab eventKey={2} title="Grouped"><Grouped /></Tab>
+			</Tabs>
 		);
 	}
 }

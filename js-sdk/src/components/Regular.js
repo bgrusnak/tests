@@ -30,7 +30,7 @@ export default class Regular extends Component {
 								{this.items.map((item) => {
 									let data = JSON.stringify(item.measurements)
 									return (
-										<tr id={item._id}>
+										<tr key={item._id}>
 											<td>{item.name}</td>
 											<td>{item.unit}</td>
 											<td>
@@ -42,9 +42,9 @@ export default class Regular extends Component {
 														</tr>
 													</thead>
 													<tbody>
-														{item.measurements.map(measure => {
+														{item.measurements.map((measure,index) => {
 															return (
-																<tr id={measure[0]}>
+																<tr key={index}>
 																<td>{measure[0]}</td>
 																<td>{JSON.stringify(measure[1])}</td>
 															</tr>

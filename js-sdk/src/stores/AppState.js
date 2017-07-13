@@ -1,6 +1,6 @@
 import { toJS, observable, action, computed } from 'mobx';
 
-
+const maxGrouped=20
 
 export default class AppState {
   @observable items = []
@@ -38,35 +38,26 @@ export default class AppState {
 
   onSourceMessage = function (e) {
     let data = JSON.parse(e.data)
-    this.items.replace(data.concat(toJS(this.items)).slice(0, 100))
-    let currentGrouped = []
+    this.items.replace(data.concat(toJS(this.items)).slice(0, maxGrouped))
+    let currentGrouped = toJS(this.grouped)
+    let cts = {}
+    currentGrouped.map(item => {
+      cts[item.name] = item
+    })
     data.map(row => {
       let fnd = currentGrouped.find(group => group.name == row.name)
-      if (fnd) {
-        fnd.measurements = fnd.measurements.concat(row.measurements)
-        currentGrouped = currentGrouped.map(item => {
-          return item.name == row.name ? fnd : item
-        })
+      if (cts[row.name]) {
+        let newItems=row.measurements.slice(0,maxGrouped)
+        cts[row.name].measurements = newItems.concat(cts[row.name].measurements.slice(0, maxGrouped-newItems.length))
       } else {
-        currentGrouped.push({ name: row.name, unit: row.unit, measurements:row.measurements })
+        cts[row.name] = { name: row.name, unit: row.unit, measurements: row.measurements.slice(0,maxGrouped) }
       }
     })
-    let grp = toJS(this.grouped)
-    currentGrouped.map(row => {
-      let fnd = grp.find(group => group.name == row.name)
-      if (fnd) {
-        fnd.measurements = fnd.measurements.concat(row.measurements)
-        currentGrouped = currentGrouped.map(item => {
-          return item.name == row.name ? fnd : item
-        })
-      } else {
-        row.measurements = row.measurements.sort((a,b)=>{
-          return b[0]-a[0]
-        }).slice(0,100)
-        grp.push({ name: row.name, unit: row.unit, measurements:row.measurements })
-      }
+    currentGrouped = []
+    Object.keys(cts).map(key => {
+      currentGrouped.push(cts[key])
     })
-    this.grouped.replace(grp)
+    this.grouped.replace(currentGrouped)
   }
   onSourceOpen = function (e) {
     console.log("Connection was opened")
