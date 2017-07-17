@@ -4,6 +4,9 @@ import { Tabs, Tab } from 'react-bootstrap'
 import Regular from './Regular'
 import Grouped from './Grouped'
 
+
+
+
 @inject('store')
 @observer
 export default class Home extends Component {
@@ -12,7 +15,6 @@ export default class Home extends Component {
 		this.store = props.store.appState;
 		this.items = props.store.appState.items
 	}
-
 	render() {
 		return (
 			<Tabs id="t">

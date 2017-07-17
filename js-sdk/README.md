@@ -4,20 +4,13 @@
 -----
 
 ```
-yarn
-```
-or
-```
 npm install
+npm install -g karma-cli
 ```
 
 ### Start project on local server (go to localhost:1337)
 -----
 
-```
-yarn start
-```
-or
 ```
 npm start
 ```
@@ -26,20 +19,12 @@ npm start
 -----
 
 ```
-yarn run build
-```
-or
-```
 npm run build
 ```
 
 ### Preview minified production-ready bundle (go to localhost:3000)
 -----
 
-```
-yarn run preview
-```
-or
 ```
 npm run preview
 ```

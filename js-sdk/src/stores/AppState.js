@@ -1,6 +1,7 @@
 import { toJS, observable, action, computed } from 'mobx';
 
-const maxGrouped=20
+const maxGrouped=10
+const maxItems=20
 
 export default class AppState {
   @observable items = []
@@ -36,16 +37,13 @@ export default class AppState {
     this._isRunning = false
   }
 
-  onSourceMessage = function (e) {
-    let data = JSON.parse(e.data)
-    this.items.replace(data.concat(toJS(this.items)).slice(0, maxGrouped))
-    let currentGrouped = toJS(this.grouped)
-    let cts = {}
-    currentGrouped.map(item => {
+  fillGrouped=function(oldGrouped, data) {
+     let cts = {}
+    oldGrouped.map(item => {
       cts[item.name] = item
     })
     data.map(row => {
-      let fnd = currentGrouped.find(group => group.name == row.name)
+      let fnd = oldGrouped.find(group => group.name == row.name)
       if (cts[row.name]) {
         let newItems=row.measurements.slice(0,maxGrouped)
         cts[row.name].measurements = newItems.concat(cts[row.name].measurements.slice(0, maxGrouped-newItems.length))
@@ -53,11 +51,17 @@ export default class AppState {
         cts[row.name] = { name: row.name, unit: row.unit, measurements: row.measurements.slice(0,maxGrouped) }
       }
     })
-    currentGrouped = []
+    let ret = []
     Object.keys(cts).map(key => {
-      currentGrouped.push(cts[key])
+      ret.push(cts[key])
     })
-    this.grouped.replace(currentGrouped)
+    return ret
+  }
+
+  onSourceMessage = function (e) {
+    let data = JSON.parse(e.data)
+    this.items.replace(data.concat(toJS(this.items)).slice(0, maxItems))
+    this.grouped.replace(this.fillGrouped(toJS(this.grouped), data))
   }
   onSourceOpen = function (e) {
     console.log("Connection was opened")

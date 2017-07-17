@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { observable } from 'mobx'
-import { Table, Grid, Row, Col } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
+import TableHeader from './TableHeader'
+import TableBody from './TableBody'
 
 @inject('store')
 @observer
@@ -15,52 +17,10 @@ export default class Grouped extends Component {
 
 	render() {
 		return (
-			<Grid>
-				<Row>
-					<Col>
-						<Table striped bordered condensed hover responsive>
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Unit</th>
-									<th>Measurements</th>
-								</tr>
-							</thead>
-							<tbody>
-								{this.items.map((item,itemindex) => {
-									let data = JSON.stringify(item.measurements)
-									return (
-										<tr key={itemindex}>
-											<td>{item.name}</td>
-											<td>{item.unit}</td>
-											<td>
-												<Table striped bordered condensed hover responsive>
-													<thead>
-														<tr>
-															<th>Timestamp</th>
-															<th>Value</th>
-														</tr>
-													</thead>
-													<tbody>
-														{item.measurements.map((measure, index) => {
-															return (
-																<tr key={index}>
-																	<td>{measure[0]}</td>
-																	<td>{JSON.stringify(measure[1])}</td>
-																</tr>
-															)
-														})}
-													</tbody>
-												</Table>
-											</td>
-										</tr>
-									)
-								})}
-							</tbody>
-						</Table>
-					</Col>
-				</Row>
-			</Grid>
+			<Table striped bordered condensed hover responsive>
+				<TableHeader />
+				<TableBody lines={this.items} />
+			</Table>
 		);
 	}
 }
